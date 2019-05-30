@@ -26,10 +26,16 @@ public class LongEventMain {
             new SimpleThreadFactory(prefix), ProducerType.SINGLE, new BlockingWaitStrategy());
 
         // Connect the handler
-        LongEventHandler[] handlers = IntStream.range(0, 3)
+        LongEventHandler[] eventHandlers = IntStream.range(0, 3)
             .mapToObj(i -> new LongEventHandler())
             .toArray(LongEventHandler[]::new);
-        disruptor.handleEventsWith(handlers);
+        LongWorkHandler[] workHandlers = IntStream.range(0, 3)
+            .mapToObj(i -> new LongWorkHandler())
+            .toArray(LongWorkHandler[]::new);
+        // 广播：对于多个消费者，每条信息会达到所有的消费者，被多次处理
+        disruptor.handleEventsWith(eventHandlers);
+        // 分组：对于同一组内的多个消费者，每条信息只会被组内一个消费者处理
+        disruptor.handleEventsWithWorkerPool(workHandlers);
 
         // Start the Disruptor, starts all threads running
         disruptor.start();

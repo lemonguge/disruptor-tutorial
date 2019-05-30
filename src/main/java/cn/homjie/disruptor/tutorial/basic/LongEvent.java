@@ -2,6 +2,7 @@ package cn.homjie.disruptor.tutorial.basic;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Slf4j
+@ToString
 public class LongEvent {
 
     private long value;
